@@ -168,7 +168,7 @@ public class BotProcessor
             float labelRadius = radius + 50;
             float labelX = centerX + labelRadius * (float)Math.Cos(angle * Math.PI / 180);
             float labelY = centerY + labelRadius * (float)Math.Sin(angle * Math.PI / 180);
-            string labelText = $"{pair.Key}: {pair.Value:C2}"; // Category name and decimal value
+            string labelText = $"{pair.Key}: {pair.Value:N2}"; // Category name and decimal value
 
             // Adjust font size based on label length
             float fontSize = 16;
