@@ -1,0 +1,202 @@
+// using System.Text;
+// using System.Text.Json;
+//
+// namespace Raiffeisen.Analytic.Services;
+//
+// public class StatisticsService
+// {
+//     private const string BaseUrl = "https://rol.raiffeisenbank.rs/CorporateV4/Protected/Services/";
+//     public async Task GetStatistics()
+//     {
+//         try
+//         {
+//             if (file.Length == 0)
+//             {
+//                 return BadRequest("No file provided");
+//             }
+//             
+//             using var reader = new StreamReader(file.OpenReadStream());
+//             var xmlString = await reader.ReadToEndAsync();
+//             
+//             var xmlDoc = new XmlDocument();
+//             xmlDoc.LoadXml(xmlString);
+//
+//             // Define dictionaries to store debit and credit sums by group
+//             var debitSums = new Dictionary<string, decimal>();
+//             var creditSums = new Dictionary<string, decimal>();
+//             decimal totalDebit = 0;
+//             decimal totalCredit = 0;
+//
+//             // Get all rows
+//             using var rows = xmlDoc.SelectNodes("//ss:Row", GetNamespaceManager(xmlDoc));
+//
+//             var i = 0;
+//             // Iterate over each row
+//             if (rows != null)
+//                 foreach (XmlNode row in rows)
+//                 {
+//                     i++;
+//                     if (i <= 5)
+//                     {
+//                         continue;
+//                     }
+//
+//                     // Get all cells in the row
+//                     var cells = row.SelectNodes("./ss:Cell/ss:Data",
+//                         GetNamespaceManager(xmlDoc));
+//                     if (cells == null)
+//                     {
+//                         continue;
+//                     } 
+//                     
+//                     if (cells.Count <= 0)
+//                     {
+//                         continue;
+//                     }
+//
+//                     if (cells.Count == 4 && cells[0].InnerText.Contains("Prethodno stanje"))
+//                     {
+//                         continue;
+//                     }
+//
+//                     // Extract relevant data from cells
+//                     var date = cells[0].InnerText.Trim();
+//                     var description = cells[1].InnerText.Trim();
+//                     var transaction = cells[5].InnerText.Trim();
+//                     
+//                     var creditAmount = decimal.Parse(cells[11].InnerText.Trim(),
+//                         CultureInfo.InvariantCulture);
+//                     
+//                     var debitAmount = decimal.Parse(cells[10].InnerText.Trim(),
+//                         CultureInfo.InvariantCulture);
+//
+//                     // Group by description and accumulate amounts
+//                     if (string.IsNullOrEmpty(description)) continue;
+//                     
+//                     if (creditAmount > 0)
+//                     {
+//                         var categoryName = _categoryMapping.FirstOrDefault(c => description.ToUpper().Contains(c.Key.ToUpper())).Value ?? ""; 
+//
+//                         categoryName = categoryName == "" ? description : categoryName;
+//                         
+//                         // Credit transaction
+//                         if (!creditSums.TryAdd(categoryName, creditAmount))
+//                         {
+//                             creditSums[categoryName] += creditAmount;
+//                         }
+//
+//                         totalCredit += creditAmount;
+//                     }
+//                     else
+//                     {
+//                         var categoryName = _categoryMapping.FirstOrDefault(c => description.ToUpper().Contains(c.Key.ToUpper())).Value ?? ""; 
+//
+//                         categoryName = categoryName == "" ? description : categoryName;
+//                         // Debit transaction
+//                         if (!debitSums.TryAdd(categoryName, debitAmount))
+//                         {
+//                             debitSums[categoryName] += debitAmount;
+//                         }
+//
+//                         totalDebit += debitAmount;
+//                     }
+//                 }
+//
+//             // Display statistics
+//             Console.WriteLine("Debit Statistics:");
+//             foreach (var pair in debitSums)
+//             {
+//                 Console.WriteLine($"{pair.Key}: {pair.Value}");
+//             }
+//
+//             Console.WriteLine("\nCredit Statistics:");
+//             foreach (var pair in creditSums)
+//             {
+//                 Console.WriteLine($"{pair.Key}: {pair.Value}");
+//             }
+//
+//             Console.WriteLine($"Total Debit {totalDebit}");
+//             Console.WriteLine($"Total Credit {totalCredit}");
+//         }
+//         catch (WebException ex)
+//         {
+//             Console.WriteLine("Error: " + ex.Message);
+//         }
+//
+//         return Ok();
+//     }
+//     
+//     public async Task<FetchResponse<T?>> FetchApi<T>(string url, FetchOptions options)
+//     {
+//         using var httpClient = new HttpClient();
+//         var content = new StringContent(JsonSerializer.Serialize(options.Body), System.Text.Encoding.UTF8, "application/json");
+//
+//         var response = await httpClient.PostAsync(BaseUrl + url, content);
+//         response.EnsureSuccessStatusCode();
+//         var responseBody = await response.Content.ReadAsStringAsync();
+//         return new FetchResponse<T?>
+//         {
+//             Body = JsonSerializer.Deserialize<T>(responseBody),
+//             StatusCode = (int)response.StatusCode
+//         };
+//     }
+//     
+//     public async Task<string> Auth(string login, string password)
+//     {
+//         var saltedPassword = await GetSaltedPassword(login, password);
+//         var response = await FetchApi<string>("CorporateLoginService.svc/GetTicketUP", new FetchOptions
+//         {
+//             Method = "POST",
+//             Body = new { username = login, password = password }
+//         });
+//         
+//         if (string.IsNullOrEmpty(response.Body))
+//         {
+//             throw new InvalidLoginOrPasswordError();
+//         }
+//
+//         return response.Body;
+//     }
+//
+//     public async Task FetchAccounts(string ticket)
+//     {
+//         
+//     }
+//     
+//     public async Task<string> GetSaltedPassword(string login, string password)
+//     {
+//         var salt = login.PadRight(8, '\0');
+//         var saltBytes = Encoding.UTF8.GetBytes(salt);
+//         var passwordBytes = Encoding.UTF8.GetBytes(password);
+//         var hash = await Task.Run(() =>
+//         {
+//             var argon = new Argon2i(passwordBytes)
+//             {
+//                 Salt = saltBytes,
+//                 DegreeOfParallelism = 1,
+//                 Iterations = 3,
+//                 MemorySize = 4096
+//             };
+//             
+//             return argon.GetBytes(32);
+//         });
+//         return Encoding.UTF8.GetString(hash);
+//     }
+// }
+//
+// public class FetchOptions
+// {
+//     public string Method { get; set; }
+//     public object Body { get; set; }
+// }
+//
+// public class FetchResponse<T>
+// {
+//     public T Body { get; set; }
+//     public int StatusCode { get; set; }
+// }
+//
+// public class InvalidLoginOrPasswordError : Exception
+// {
+//     public InvalidLoginOrPasswordError() : base("Invalid login or password") { }
+// }
