@@ -7,6 +7,7 @@ var cancellationToken = cancellationTokenSource.Token;
 
 try
 {
+    Console.WriteLine("Starting bot...");
     var botProcessor = new BotProcessor(botToken);
     await botProcessor.StartBot(cancellationToken);
     cancellationTokenSource.Cancel();
