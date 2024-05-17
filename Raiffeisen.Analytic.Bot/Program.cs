@@ -1,23 +1,25 @@
-﻿using Raiffeisen.Analytic.Bot;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Raiffeisen.Analytic.Bot.Services;
 
-var botToken = Environment.GetEnvironmentVariable("BOT_TOKEN") ?? throw new ArgumentNullException("Not found BOT_TOKEN environment variable");
-
-var cancellationTokenSource = new CancellationTokenSource();
-var cancellationToken = cancellationTokenSource.Token;
-
-try
+public static class Program
 {
-    Console.WriteLine("Starting bot...");
-    var botProcessor = new BotProcessor(botToken);
-    await botProcessor.StartBot(cancellationToken);
-    cancellationTokenSource.Cancel();
-}
-catch (Exception ex)
-{
-    Console.WriteLine($"Error: {ex.Message}");
-    cancellationTokenSource.Cancel();
-}
+    public static void Main(string[] args)
+    {
+        CreateHostBuilder(args).Build().Run();
+    }
 
+    private static IHostBuilder CreateHostBuilder(string[] args) 
+    {
+        var botToken = Environment.GetEnvironmentVariable("BOT_TOKEN") ?? throw new ArgumentNullException("Not found BOT_TOKEN environment variable");
+        
+        return Host.CreateDefaultBuilder(args)
+            .ConfigureServices((hostContext, services) =>
+            {
+                services.AddHostedService((_) => new TelegramBotHostedService(botToken));
+            });
+    }
+}
 
 // // Read configuration from environment variables
 // var botToken = Environment.GetEnvironmentVariable("BOT_TOKEN") ?? throw new ArgumentNullException("Not found BOT_TOKEN environment variable");

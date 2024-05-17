@@ -30,7 +30,6 @@ public class BotProcessor
 
         var me = await _botClient.GetMeAsync();
         Console.WriteLine($"Start listening for @{me.Username}");
-        Console.ReadLine();
     }
 
     private static Dictionary<string, string> InitializeCategoryMapping()
