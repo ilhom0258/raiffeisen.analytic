@@ -208,11 +208,14 @@ public class BotProcessor
     private async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update,
         CancellationToken cancellationToken)
     {
+        Console.WriteLine("Processing update...");
         if (update.Message is not { Document: { } document, Chat: { Id: var chatId } })
             return;
 
         if (!document.FileName.Contains(".xls"))
             return;
+        
+        Console.WriteLine("Processing Excel file...");
 
         try
         {
