@@ -82,6 +82,7 @@ public class BotProcessor
             { "KOM691 SRB SRB BEOGRAD", "Clothing" },
             { "TH 27 Jevrejska", "Clothing" },
             { "VINTAGE STORY", "Clothing" },
+            { "GARBINO DOO", "Clothing" },
 
             { "Yandex Go", "Transportation" },
             { "BG NAPLATA", "Transportation" },
@@ -89,7 +90,9 @@ public class BotProcessor
             { "SRBIJA VOZ", "Transportation" },
 
             { "CINEPLEXX", "Entertainment" },
-            { "Planet Bike", "Entertainment" },
+            
+            { "Planet Bike", "Sport Equipment" },
+            { "PLANETA SPORT", "Sport Equipment"},
 
             { "YETTEL", "Communication" },
 
@@ -379,9 +382,14 @@ public class BotProcessor
     {
         var caption = "```" +
                       "\nCategory".PadRight(maxCategoryLength + 5) + "Amount\n";
+
+        if (data.Count > 0)
+        {
+            caption += "\n" + data.Select(pair => $"{pair.Key}:".PadRight(maxCategoryLength + 5)+$"{pair.Value:N2}").Aggregate((a, b) => $"{a}\n{b}");
+        }
         
-        caption += "\n" + data.Select(pair => $"{pair.Key}:".PadRight(maxCategoryLength + 5)+$"{pair.Value:N2}").Aggregate((a, b) => $"{a}\n{b}");
         caption += $"\n\nTotal:".PadRight(maxCategoryLength + 5)+$"{total:N2}```";
+        
         return caption;
     }
 
