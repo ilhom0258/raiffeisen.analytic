@@ -339,22 +339,21 @@ public class BotProcessor
         int maxCategoryLength,
         CancellationToken cancellationToken)
     {
-        var chartImagePath = GeneratePieChartAndSaveImage(data, title);
+        //var chartImagePath = GeneratePieChartAndSaveImage(data, title);
         
         var caption = FormatCaption(data, total, maxCategoryLength);
 
-        await using var chartStream = new FileStream(chartImagePath, FileMode.Open);
-        var chartFile = new InputFileStream(chartStream, $"{title}_chart.png");
+        //await using var chartStream = new FileStream(chartImagePath, FileMode.Open);
+        //var chartFile = new InputFileStream(chartStream, $"{title}_chart.png");
 
-        await _botClient.SendPhotoAsync(
+        await _botClient.SendTextMessageAsync(
             chatId,
-            chartFile,
-            caption: caption,
+            caption,
             parseMode: ParseMode.MarkdownV2,
             cancellationToken: cancellationToken
         );
 
-        File.Delete(chartImagePath);
+        //File.Delete(chartImagePath);
     }
 
     private string GeneratePieChartAndSaveImage(Dictionary<string, decimal> data, string title)
