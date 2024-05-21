@@ -12,6 +12,6 @@ Response will be something like:
 
 
 ## Things to do
-- [] Find a way to categorize transactions (for now I use map of places to categorize everything)
-- [] Add pie-chart or bar-chart options
-- [] Add polls so user from the bot can edit or utilize the response
+- [ ] Find a way to categorize transactions (for now I use map of places to categorize everything)
+- [ ] Add pie-chart or bar-chart options
+- [ ] Add polls so user from the bot can edit or utilize the response
