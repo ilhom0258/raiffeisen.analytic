@@ -1,7 +1,7 @@
-Raiffeisen Analytic 0.0.1
-telegram bot link: @raiffiesen_analytic_bot
+# Raiffeisen Analytic 0.0.1
+- telegram bot link: @raiffiesen_analytic_bot
 
-# How to use
+## How to use
 1. go to: https://rol.raiffeisenbank.rs/ (for now only Corporate supported)
 2. download account turnover for desired period in .XLS format
 3. load in to telegram bot @raiffiesen_analytic_bot
