@@ -1,5 +1,5 @@
 # Raiffeisen Analytic 0.0.1
-- telegram bot link: @raiffiesen_analytic_bot
+- telegram bot link: [@raiffiesen_analytic_bot](https://t.me/raiffiesen_analytic_bot)
 
 ## How to use
 1. go to: https://rol.raiffeisenbank.rs/ (for now only Corporate supported)
