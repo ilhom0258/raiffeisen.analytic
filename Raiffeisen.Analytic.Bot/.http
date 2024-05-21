@@ -1,0 +1,23 @@
+
+
+POST https://rol.raiffeisenbank.rs/CorporateV4/Protected/Services/DataServiceCorporate.svc/GetAccountTurnover
+Content-Type: application/json
+Cookie: 
+
+{
+  "accountNumber": "",
+  "productCoreID": "501",
+  "filterParam": {
+    "AccountNumber": "",
+    "ItemType": "",
+    "FromDate": "21.04.2024",
+    "ToDate": "21.05.2024",
+    "FromAmount": "",
+    "ToAmount": "",
+    "Name": "",
+    "CreditAccount": "",
+    "ItemCount": "",
+    "CurrencyCodeNumeric": "941"
+  },
+}
+
