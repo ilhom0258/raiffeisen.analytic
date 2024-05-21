@@ -1,4 +1,7 @@
-# Raiffeisen Analytic 0.0.1
+<img width="438" alt="image" src="https://github.com/ilhom0258/raiffeisen.analytic/assets/35452989/a16fd671-3ec5-428c-9484-b83428be1f3c">
+
+# Raiffeisen Analytic 0.0.1 
+
 - telegram bot link: [@raiffiesen_analytic_bot](https://t.me/raiffiesen_analytic_bot)
 
 ## How to use
